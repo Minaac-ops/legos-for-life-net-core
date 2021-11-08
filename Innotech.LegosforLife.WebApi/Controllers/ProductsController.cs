@@ -22,7 +22,7 @@ namespace InnoTech.LegosForLife.WebApi.Controllers
             _service = service;
         } 
         
-        [Authorize(Policy = "accessProducts")]
+        [PermissionAuthorize]
         [HttpGet]
         public ActionResult<List<Product>> Get()
         {

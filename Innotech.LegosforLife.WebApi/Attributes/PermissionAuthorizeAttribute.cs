@@ -7,10 +7,13 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace InnoTech.LegosForLife.Security
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class MainAuthorizeAttribute : Attribute, IAuthorizationFilter
+    public class PermissionAuthorizeAttribute : Attribute, IAuthorizationFilter
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            var route = context.HttpContext.Request.Path;
+            var method = context.HttpContext.Request.Method;
+            
             var loginUser = context.HttpContext.Items["LoginUser"];
             if (loginUser == null)
             {

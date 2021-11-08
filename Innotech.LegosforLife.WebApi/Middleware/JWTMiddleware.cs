@@ -27,12 +27,12 @@ namespace InnoTech.LegosForLife.WebApi.Middleware
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                attachAccountToContext(context, token);
+                AttachAccountToContext(context, token);
 
             await _next(context);
         }
 
-        private void attachAccountToContext(HttpContext context, string token)
+        private void AttachAccountToContext(HttpContext context, string token)
         {
             try
             {

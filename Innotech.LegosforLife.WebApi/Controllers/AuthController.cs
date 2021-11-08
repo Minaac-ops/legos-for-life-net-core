@@ -29,7 +29,7 @@ namespace InnoTech.LegosForLife.WebApi.Controllers
             return Ok(new { Token = tokenString, Message = "Success" });
         }
         
-        [MainAuthorize]
+        [PermissionAuthorize]
         [HttpGet(nameof(GetResult))]
         public IActionResult GetResult()
         {

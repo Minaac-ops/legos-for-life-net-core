@@ -1,5 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using InnoTech.LegosForLife.Security.Model;
@@ -44,5 +45,9 @@ namespace InnoTech.LegosForLife.Security.Services
             return tokenHandler.WriteToken(token);
         }
 
+        public bool UserHasPermission(LoginUser user, string permission)
+        {
+            return user.Permissions.Exists(p => p.Name.Equals(permission));
+        }
     }
 }
