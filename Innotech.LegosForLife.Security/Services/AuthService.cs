@@ -49,5 +49,10 @@ namespace InnoTech.LegosForLife.Security.Services
         {
             return user.Permissions.Exists(p => p.Name.Equals(permission));
         }
+
+        public int GetUserId()
+        {
+            return 1;
+        }
     }
 }

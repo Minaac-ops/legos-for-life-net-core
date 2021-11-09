@@ -23,6 +23,7 @@ namespace InnoTech.LegosForLife.Security
                     StatusCode = StatusCodes.Status401Unauthorized
                 };
             }
+            
         }
     }
 }

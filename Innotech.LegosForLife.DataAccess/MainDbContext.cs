@@ -12,5 +12,6 @@ namespace InnoTech.LegosForLife.DataAccess
         }
 
         public virtual DbSet<ProductEntity> Products { get; set; }
+        public virtual DbSet<UserEntity> Users { get; set; }
     }
 }

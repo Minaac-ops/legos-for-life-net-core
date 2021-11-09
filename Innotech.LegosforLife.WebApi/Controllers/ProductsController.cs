@@ -16,16 +16,19 @@ namespace InnoTech.LegosForLife.WebApi.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _service;
+        private readonly IAuthService _authService;
 
-        public ProductsController(IProductService service)
+        public ProductsController(IProductService service, IAuthService authService)
         {
             _service = service;
+            _authService = authService;
         } 
         
         [PermissionAuthorize]
         [HttpGet]
         public ActionResult<List<Product>> Get()
         {
+            var user = _authService.GetUserId();
             return _service.GetProducts();
         }
     }

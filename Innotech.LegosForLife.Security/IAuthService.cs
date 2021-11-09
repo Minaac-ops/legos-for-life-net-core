@@ -7,5 +7,6 @@ namespace InnoTech.LegosForLife.Security
         string GenerateJwtToken(LoginUser userUserName);
         
         bool UserHasPermission(LoginUser user, string permission);
+        int GetUserId();
     }
 }
