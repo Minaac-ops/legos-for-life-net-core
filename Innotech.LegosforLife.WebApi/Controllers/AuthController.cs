@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
 using InnoTech.LegosForLife.Security;
 using InnoTech.LegosForLife.Security.Model;
+using InnoTech.LegosForLife.WebApi.Dtos.Auth;
+using InnoTech.LegosForLife.WebApi.PolicyHandlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -18,10 +22,14 @@ namespace InnoTech.LegosForLife.WebApi.Controllers
         }
         
         [AllowAnonymous]
-        [HttpPost(nameof(Auth))]
-        public IActionResult Auth([FromBody] LoginUser user)
+        [HttpPost(nameof(Login))]
+        public IActionResult Login([FromBody] LoginDto dto)
         {
-            var tokenString = _authService.GenerateJwtToken(user);
+            var tokenString = _authService.GenerateJwtToken(new LoginUser
+            {
+                UserName = dto.Username,
+                HashedPassword = _authService.Hash(dto.Password)
+            });
             if (string.IsNullOrEmpty(tokenString))
             {
                 return BadRequest("Please pass the valid Username and Password");
@@ -29,12 +37,22 @@ namespace InnoTech.LegosForLife.WebApi.Controllers
             return Ok(new { Token = tokenString, Message = "Success" });
         }
         
-        [PermissionAuthorize]
-        [HttpGet(nameof(GetResult))]
-        public IActionResult GetResult()
+        [Authorize(Policy=nameof(CanReadProductsHandler))]
+        [HttpGet(nameof(GetProfile))]
+        public ActionResult<ProfileDto> GetProfile()
         {
             var user = HttpContext.Items["LoginUser"] as LoginUser;
-            return Ok("API Validated");
+            if (user != null)
+            {
+                List<Permission> permissions = _authService.GetPermissions(user.Id);
+                return Ok(new ProfileDto
+                {
+                    Permissions = permissions.Select(p => p.Name).ToList(),
+                    Name = user.UserName
+                });
+            }
+
+            return Unauthorized();
         }
         
     }

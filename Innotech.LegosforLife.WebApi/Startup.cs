@@ -2,12 +2,15 @@ using System.Net;
 using System.Text;
 using InnoTech.LegosForLife.Core.IServices;
 using InnoTech.LegosForLife.DataAccess;
+using InnoTech.LegosForLife.DataAccess.Entities;
 using InnoTech.LegosForLife.DataAccess.Repositories;
 using InnoTech.LegosForLife.Domain.IRepositories;
 using InnoTech.LegosForLife.Domain.Services;
 using InnoTech.LegosForLife.Security;
+using InnoTech.LegosForLife.Security.Model;
 using InnoTech.LegosForLife.Security.Services;
 using InnoTech.LegosForLife.WebApi.Middleware;
+using InnoTech.LegosForLife.WebApi.PolicyHandlers;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -66,11 +69,13 @@ namespace InnoTech.LegosForLife.WebApi
             {
                 opt.UseSqlite("Data Source=main.db"); 
             });
+            services.AddDbContext<AuthDbContext>(opt =>
+            {
+                opt.UseSqlite("Data Source=auth.db"); 
+            });
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IAuthService, AuthService>();
-            services.AddSingleton<IAuthorizationMiddlewareResultHandler,
-                MainAuthorizationMiddlewareResultHandler>();
             
             services.AddAuthentication(option =>
             {
@@ -90,22 +95,80 @@ namespace InnoTech.LegosForLife.WebApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) //Configuration["JwtToken:SecretKey"]
                 };
             });
+            services.AddSingleton<IAuthorizationHandler, CanWriteProductsHandler>();
+            services.AddSingleton<IAuthorizationHandler, CanReadProductsHandler>();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("accessProducts", 
-                    policy => policy.Requirements.Add(new CanReadProductsRequirement()));
+                options.AddPolicy(nameof(CanWriteProductsHandler), 
+                    policy => policy.Requirements.Add(new CanWriteProductsHandler()));
+                options.AddPolicy(nameof(CanReadProductsHandler), 
+                    policy => policy.Requirements.Add(new CanReadProductsHandler()));
             });
+            services.AddCors(opt => opt
+                .AddPolicy("dev-policy", policy =>
+                {
+                    policy
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                }));
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+            IApplicationBuilder app, IWebHostEnvironment env, 
+            MainDbContext mainContext, AuthDbContext authDbContext)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Innotech.LegosforLife.WebApi v1"));
+                app.UseCors("dev-policy");
+
+                #region Setup Contexts
+                
+                mainContext.Database.EnsureDeleted();
+                mainContext.Database.EnsureCreated();
+                mainContext.Users.Add(new UserEntity { Name = "Bilbo" });
+                mainContext.SaveChanges();
+                mainContext.Products.AddRange(
+                    new ProductEntity{ Name = "P1", OwnerId = 1},
+                    new ProductEntity{ Name = "P2", OwnerId = 1},
+                    new ProductEntity{ Name = "P3", OwnerId = 1});
+                mainContext.SaveChanges();
+                
+                authDbContext.Database.EnsureDeleted();
+                authDbContext.Database.EnsureCreated();
+                authDbContext.LoginUsers.Add(new LoginUser
+                {
+                    UserName = "ljuul",
+                    HashedPassword = "123456",
+                    DbUserId = 1,
+                });
+                authDbContext.LoginUsers.Add(new LoginUser
+                {
+                    UserName = "ljuul2",
+                    HashedPassword = "123456",
+                    DbUserId = 2,
+                });
+                authDbContext.Permissions.AddRange(new Permission()
+                {
+                    Name = "CanWriteProducts"
+                }, new Permission()
+                {
+                    Name = "CanReadProducts"
+                });
+                authDbContext.SaveChanges();
+                authDbContext.UserPermissions.Add(new UserPermission { PermissionId = 1, UserId = 1 });
+                authDbContext.UserPermissions.Add(new UserPermission { PermissionId = 2, UserId = 1 });
+                authDbContext.UserPermissions.Add(new UserPermission { PermissionId = 2, UserId = 2 });
+                authDbContext.SaveChanges();
+                
+
+                #endregion
+               
             }
 
             app.UseMiddleware<JWTMiddleware>();

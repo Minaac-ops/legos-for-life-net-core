@@ -8,5 +8,7 @@ namespace InnoTech.LegosForLife.Core.IServices
         List<Product> GetProducts();
 
         List<Product> GetMyProducts(int userId);
+        Product GetProduct(int id);
+        Product UpdateProduct(Product product);
     }
 }

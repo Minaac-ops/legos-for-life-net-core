@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using InnoTech.LegosForLife.Security.Model;
 
 namespace InnoTech.LegosForLife.Security
@@ -5,8 +6,7 @@ namespace InnoTech.LegosForLife.Security
     public interface IAuthService
     {
         string GenerateJwtToken(LoginUser userUserName);
-        
-        bool UserHasPermission(LoginUser user, string permission);
-        int GetUserId();
+        string Hash(string password);
+        List<Permission> GetPermissions(int userId);
     }
 }
