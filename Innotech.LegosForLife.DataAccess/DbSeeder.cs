@@ -20,5 +20,10 @@ namespace InnoTech.LegosForLife.DataAccess
             _ctx.Products.Add(new ProductEntity{Name = "Lego3"});
             _ctx.SaveChanges();
         }
+
+        public void SeedProduction()
+        {
+            _ctx.Database.EnsureCreated();
+        }
     }
 }
