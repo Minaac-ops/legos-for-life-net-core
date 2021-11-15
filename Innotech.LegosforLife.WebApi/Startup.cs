@@ -65,10 +65,6 @@ namespace InnoTech.LegosForLife.WebApi
                 app.UseCors("Dev-cors");
                 new DbSeeder(context).SeedDevelopment();
             }
-            else
-            {
-                context.Database.EnsureCreated();
-            }
 
             app.UseHttpsRedirection();
 
