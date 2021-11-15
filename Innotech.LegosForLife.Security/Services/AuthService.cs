@@ -43,7 +43,11 @@ namespace InnoTech.LegosForLife.Security.Services
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("Id", userFound.Id.ToString()), new Claim("UserName", userFound.UserName) }),
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim("Id", userFound.Id.ToString()), 
+                    new Claim("UserName", userFound.UserName)
+                }),
                 Expires = DateTime.UtcNow.AddDays(14),
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
