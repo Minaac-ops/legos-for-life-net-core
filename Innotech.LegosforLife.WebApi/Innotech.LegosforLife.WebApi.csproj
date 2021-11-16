@@ -6,6 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.12" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     </ItemGroup>
 
@@ -14,10 +16,6 @@
       <ProjectReference Include="..\InnoTech.LegosForLife.DataAccess\InnoTech.LegosForLife.DataAccess.csproj" />
       <ProjectReference Include="..\InnoTech.LegosForLife.Domain\InnoTech.LegosForLife.Domain.csproj" />
       <ProjectReference Include="..\InnoTech.LegosForLife.Security\InnoTech.LegosForLife.Security.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Controllers" />
     </ItemGroup>
 
 </Project>
