@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'legosforlife2021'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FF2DBA4E6EFC49B79C79E6CF2815E3D1 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_38AF3BB5A1A54F14BB01742C5DAC9D16 }}
           package: .
