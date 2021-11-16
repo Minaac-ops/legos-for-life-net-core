@@ -51,6 +51,13 @@ namespace InnoTech.LegosForLife.WebApi
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
+                options.AddPolicy("Prod-cors", policy =>
+                {
+                  policy
+                      .WithOrigins("https://legosforlife2021.firebaseapp.com")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+                } );
             });
         }
 
@@ -67,6 +74,7 @@ namespace InnoTech.LegosForLife.WebApi
             }
             else
             {
+                app.UseCors("Prod-cors");
                 new DbSeeder(context).SeedProduction();
             }
 
