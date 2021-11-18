@@ -91,8 +91,6 @@ namespace InnoTech.LegosForLife.WebApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) //Configuration["JwtToken:SecretKey"]
                 };
             });
-            //services.AddSingleton<IAuthorizationHandler, CanWriteProductsHandler>();
-            //services.AddSingleton<IAuthorizationHandler, CanReadProductsHandler>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ProductsManager", 
