@@ -45,8 +45,7 @@ namespace InnoTech.LegosForLife.Security.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim("Id", userFound.Id.ToString()), 
-                    new Claim("UserName", userFound.UserName)
+                    new Claim("Id", userFound.Id.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(14),
                 Issuer = _configuration["Jwt:Issuer"],

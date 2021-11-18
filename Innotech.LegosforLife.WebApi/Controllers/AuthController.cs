@@ -1,12 +1,9 @@
-using System.Collections.Generic;
 using System.Linq;
 using InnoTech.LegosForLife.Security;
 using InnoTech.LegosForLife.Security.Model;
 using InnoTech.LegosForLife.WebApi.Dtos.Auth;
-using InnoTech.LegosForLife.WebApi.PolicyHandlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace InnoTech.LegosForLife.WebApi.Controllers
 {
@@ -37,22 +34,15 @@ namespace InnoTech.LegosForLife.WebApi.Controllers
             return Ok(new { Token = tokenString, Message = "Success" });
         }
         
-        [Authorize(Policy=nameof(CanReadProductsHandler))]
+        [Authorize("ProfileReader")]
         [HttpGet(nameof(GetProfile))]
         public ActionResult<ProfileDto> GetProfile()
         {
-            var user = HttpContext.Items["LoginUser"] as LoginUser;
-            if (user != null)
+            var permissions = _authService.GetPermissions(1);
+            return Ok(new ProfileDto
             {
-                List<Permission> permissions = _authService.GetPermissions(user.Id);
-                return Ok(new ProfileDto
-                {
-                    Permissions = permissions.Select(p => p.Name).ToList(),
-                    Name = user.UserName
-                });
-            }
-
-            return Unauthorized();
+                Permissions = permissions.Select(p => p.Name).ToList()
+            });
         }
         
     }

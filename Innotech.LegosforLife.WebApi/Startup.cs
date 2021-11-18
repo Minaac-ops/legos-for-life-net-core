@@ -1,4 +1,3 @@
-using System.Net;
 using System.Text;
 using InnoTech.LegosForLife.Core.IServices;
 using InnoTech.LegosForLife.DataAccess;
@@ -10,10 +9,7 @@ using InnoTech.LegosForLife.Security;
 using InnoTech.LegosForLife.Security.Model;
 using InnoTech.LegosForLife.Security.Services;
 using InnoTech.LegosForLife.WebApi.Middleware;
-using InnoTech.LegosForLife.WebApi.PolicyHandlers;
-using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -81,7 +77,7 @@ namespace InnoTech.LegosForLife.WebApi
             {
                 option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
+                
             }).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -95,14 +91,16 @@ namespace InnoTech.LegosForLife.WebApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) //Configuration["JwtToken:SecretKey"]
                 };
             });
-            services.AddSingleton<IAuthorizationHandler, CanWriteProductsHandler>();
-            services.AddSingleton<IAuthorizationHandler, CanReadProductsHandler>();
+            //services.AddSingleton<IAuthorizationHandler, CanWriteProductsHandler>();
+            //services.AddSingleton<IAuthorizationHandler, CanReadProductsHandler>();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(nameof(CanWriteProductsHandler), 
-                    policy => policy.Requirements.Add(new CanWriteProductsHandler()));
-                options.AddPolicy(nameof(CanReadProductsHandler), 
-                    policy => policy.Requirements.Add(new CanReadProductsHandler()));
+                options.AddPolicy("ProductsManager", 
+                    policy => policy.RequireClaim("permissions", "ProductsManager"));
+                options.AddPolicy("ProductsReader", 
+                    policy => policy.RequireClaim("permissions", "ProductsReader"));
+                options.AddPolicy("ProfileReader", 
+                    policy => policy.RequireClaim("permissions", "ProfileReader"));
             });
             services.AddCors(opt => opt
                 .AddPolicy("dev-policy", policy =>
@@ -171,13 +169,15 @@ namespace InnoTech.LegosForLife.WebApi
                
             }
 
-            app.UseMiddleware<JWTMiddleware>();
             
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthentication();
+            
+            app.UseMiddleware<PolicyMiddleware>();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

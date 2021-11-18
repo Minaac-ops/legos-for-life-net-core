@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using InnoTech.LegosForLife.Core.IServices;
 using InnoTech.LegosForLife.Core.Models;
-using InnoTech.LegosForLife.Security;
 using InnoTech.LegosForLife.WebApi.Dtos.Products;
-using InnoTech.LegosForLife.WebApi.PolicyHandlers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InnoTech.LegosForLife.WebApi.Controllers
@@ -24,7 +18,7 @@ namespace InnoTech.LegosForLife.WebApi.Controllers
             _service = service;
         } 
         
-        [Authorize(Policy=nameof(CanReadProductsHandler))]
+        [Authorize(Policy = "ProductsReader")]
         [HttpGet]
         public ActionResult<ProductsAllDto> Get()
         {
@@ -34,7 +28,7 @@ namespace InnoTech.LegosForLife.WebApi.Controllers
             return Ok(new ProductsAllDto { List = list });
         }
         
-        [Authorize(Policy=nameof(CanReadProductsHandler))]
+        [Authorize(Policy = "ProductsReader")]
         [HttpGet("{id:int}")]
         public ActionResult<ProductDto> Get(int id)
         {
@@ -42,7 +36,7 @@ namespace InnoTech.LegosForLife.WebApi.Controllers
             return Ok(new ProductDto { Id = product.Id, Name = product.Name, OwnerId = product.OwnerId});
         }
         
-        [Authorize(Policy = nameof(CanWriteProductsHandler))]
+        [Authorize(Policy = "ProductsManager")]
         [HttpPut("{id:int}")]
         public ActionResult<ProductDto> Put(int id, ProductDto dto)
         {
