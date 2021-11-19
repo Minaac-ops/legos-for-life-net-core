@@ -3,6 +3,8 @@ using InnoTech.LegosForLife.DataAccess;
 using InnoTech.LegosForLife.DataAccess.Repositories;
 using InnoTech.LegosForLife.Domain.IRepositories;
 using InnoTech.LegosForLife.Domain.Services;
+using InnoTech.LegosForLife.Security;
+using InnoTech.LegosForLife.Security.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +36,8 @@ namespace InnoTech.LegosForLife.WebApi
             //Setting up Dependency Injection
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductService, ProductService>();
-            
+            services.AddScoped<ISecurityService, SecurityService>();
+
             //Setting DB Info
             services.AddDbContext<MainDbContext>(
                 options =>
