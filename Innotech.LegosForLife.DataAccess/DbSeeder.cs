@@ -18,10 +18,7 @@ namespace Innotech.LegosForLife.DataAccess
         {
             _ctx.Database.EnsureDeleted();
             _ctx.Database.EnsureCreated();
-            _ctx.Products.Add(new ProductEntity{Name = "Lego1"});
-            _ctx.Products.Add(new ProductEntity{Name = "Lego2"});
-            _ctx.Products.Add(new ProductEntity{Name = "Lego3"});
-
+            
             _ctx.Products.Add(new ProductEntity{Name = "Product1"});
             _ctx.Products.Add(new ProductEntity{Name = "Product2"});
             _ctx.Products.Add(new ProductEntity{Name = "Product3"});
