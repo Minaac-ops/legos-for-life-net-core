@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
-using InnoTech.LegosForLife.Core.IServices;
 using InnoTech.LegosForLife.Core.Models;
 using InnoTech.LegosForLife.Domain.IRepositories;
+using IProductService = InnoTech.LegosForLife.Core.IService.IProductService;
 
 namespace InnoTech.LegosForLife.Domain.Services
 {

@@ -12,7 +12,7 @@ namespace InnoTech.LegosForLife.DataAccess.Repositories
 
         public ProductRepository(MainDbContext ctx)
         {
-            if (ctx == null) throw new InvalidDataException("Product Repository Must have a DBContext");
+            if (ctx == null) throw new InvalidDataException("Product repository must have a DbContext");
             _ctx = ctx;
         }
         public List<Product> FindAll()

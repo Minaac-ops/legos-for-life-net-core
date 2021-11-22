@@ -1,6 +1,7 @@
-using InnoTech.LegosForLife.Core.IServices;
 using InnoTech.LegosForLife.DataAccess;
 using InnoTech.LegosForLife.DataAccess.Repositories;
+using InnoTech.LegosForLife.Core.IService;
+using Innotech.LegosForLife.DataAccess;
 using InnoTech.LegosForLife.Domain.IRepositories;
 using InnoTech.LegosForLife.Domain.Services;
 using Microsoft.AspNetCore.Builder;
@@ -64,7 +65,7 @@ namespace InnoTech.LegosForLife.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MainDbContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MainDbContext ctx)
         {
             if (env.IsDevelopment())
             {
@@ -72,12 +73,13 @@ namespace InnoTech.LegosForLife.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Innotech.LegosforLife.WebApi v1"));
                 app.UseCors("Dev-cors");
-                new DbSeeder(context).SeedDevelopment();
+                new DbSeeder(ctx).SeedDevelopment();
             }
             else
             {
                 app.UseCors("Prod-cors");
-                new DbSeeder(context).SeedProduction();
+                new DbSeeder(ctx).SeedProduction();
+                new DbSeeder(ctx).SeedDevelopment();
             }
 
             app.UseHttpsRedirection();
@@ -87,6 +89,7 @@ namespace InnoTech.LegosForLife.WebApi
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            
         }
     }
 }

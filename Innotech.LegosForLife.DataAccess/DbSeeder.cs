@@ -1,7 +1,9 @@
+using InnoTech.LegosForLife.DataAccess;
 using System.Linq;
 using InnoTech.LegosForLife.DataAccess.Entities;
 
-namespace InnoTech.LegosForLife.DataAccess
+
+namespace Innotech.LegosForLife.DataAccess
 {
     public class DbSeeder
     {
@@ -19,6 +21,11 @@ namespace InnoTech.LegosForLife.DataAccess
             _ctx.Products.Add(new ProductEntity{Name = "Lego1"});
             _ctx.Products.Add(new ProductEntity{Name = "Lego2"});
             _ctx.Products.Add(new ProductEntity{Name = "Lego3"});
+
+            _ctx.Products.Add(new ProductEntity{Name = "Product1"});
+            _ctx.Products.Add(new ProductEntity{Name = "Product2"});
+            _ctx.Products.Add(new ProductEntity{Name = "Product3"});
+
             _ctx.SaveChanges();
         }
 
@@ -32,7 +39,7 @@ namespace InnoTech.LegosForLife.DataAccess
                 _ctx.Products.Add(new ProductEntity{Name = "Lego2"});
                 _ctx.Products.Add(new ProductEntity{Name = "Lego3"});
                 _ctx.SaveChanges();
-            } 
+            }
         }
     }
 }

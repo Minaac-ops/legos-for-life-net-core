@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using InnoTech.LegosForLife.Core.IServices;
+using InnoTech.LegosForLife.Core.IService;
 using InnoTech.LegosForLife.Core.Models;
 using InnoTech.LegosForLife.Domain.IRepositories;
 using InnoTech.LegosForLife.Domain.Services;

@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using System.Dynamic;
-using EntityFrameworkCore.Testing.Moq;
 using InnoTech.LegosForLife.Core.Models;
-using Innotech.LegosForLife.DataAccess;
-using Innotech.LegosForLife.DataAccess.Repositories;
 using InnoTech.LegosForLife.Domain.IRepositories;
 using Moq;
 using Xunit;

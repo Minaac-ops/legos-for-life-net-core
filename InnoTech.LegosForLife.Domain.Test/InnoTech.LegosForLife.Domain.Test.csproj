@@ -2,11 +2,13 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="EntityFrameworkCore.Testing.Moq" Version="3.0.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
         <PackageReference Include="Moq" Version="4.16.1" />
         <PackageReference Include="xunit" Version="2.4.1" />
@@ -22,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\InnoTech.LegosForLife.Core\InnoTech.LegosForLife.Core.csproj" />
+      <ProjectReference Include="..\InnoTech.LegosForLife.DataAccess\InnoTech.LegosForLife.DataAccess.csproj" />
       <ProjectReference Include="..\InnoTech.LegosForLife.Domain\InnoTech.LegosForLife.Domain.csproj" />
     </ItemGroup>
 

@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+<<<<<<< Updated upstream
 
         <IsPackable>false</IsPackable>
     </PropertyGroup>
@@ -25,6 +26,18 @@
 
     <ItemGroup>
       <ProjectReference Include="..\InnoTech.LegosForLife.Core\InnoTech.LegosForLife.Core.csproj" />
+=======
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="EntityFrameworkCore.Testing.Moq" Version="3.0.3" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+      <PackageReference Include="xunit" Version="2.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+>>>>>>> Stashed changes
       <ProjectReference Include="..\InnoTech.LegosForLife.WebApi\InnoTech.LegosForLife.WebApi.csproj" />
     </ItemGroup>
 
